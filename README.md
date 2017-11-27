@@ -14,6 +14,7 @@ Server Version: v1.7.10
 ```
 
 ## Deploy Voyager operator
+Deploy Voyager operator following instructions here: https://github.com/appscode/voyager/blob/master/docs/install.md
 
 ```console
 # install without RBAC
@@ -33,7 +34,9 @@ curl -fsSL https://raw.githubusercontent.com/appscode/voyager/5.0.0-rc.4/hack/de
 ```
 
 ## Configure Domain
+In this tutorial, I am going to use `kiteci.pro` domain that was purchased on namecheap.com . Now, go to your AWS Route53 console and create a hosted zone for this domain.
 
+![create-hosted-zone](/doc/create-hosted-zone.png)
 
 ```console
 $ dig -t ns kiteci.pro
