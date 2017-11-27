@@ -203,39 +203,49 @@ Now wait a bit and you should see a new secret named `tls-kitecipro`. This conta
 ```console
 $ kubectl get secrets
 NAME                  TYPE                                  DATA      AGE
-acme-account          Opaque                                3         20m
-default-token-zj0wv   kubernetes.io/service-account-token   3         30m
-tls-kitecipro         kubernetes.io/tls                     2         19m
+acme-account          Opaque                                3         2m
+default-token-q3r9h   kubernetes.io/service-account-token   3         7h
+tls-kitecipro         kubernetes.io/tls                     2         20s
 ```
 
 ```console
 $ kubectl describe cert kitecipro
-Name:		kitecicom
-Namespace:	default
-Labels:		<none>
-Annotations:	kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"voyager.appscode.com/v1beta1","kind":"Certificate","metadata":{"annotations":{},"name":"kitecicom","namespace":"default"},"spec":{"acmeU...
-API Version:	voyager.appscode.com/v1beta1
-Kind:		Certificate
+Name:         kitecipro
+Namespace:    default
+Labels:       <none>
+Annotations:  kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"voyager.appscode.com/v1beta1","kind":"Certificate","metadata":{"annotations":{},"name":"kitecipro","namespace":"default"},"spec":{"acmeU...
+API Version:  voyager.appscode.com/v1beta1
+Kind:         Certificate
 Metadata:
   Cluster Name:
-  Creation Timestamp:			2017-10-29T22:07:45Z
-  Deletion Grace Period Seconds:	<nil>
-  Deletion Timestamp:			<nil>
-  Resource Version:			1376
-  Self Link:				/apis/voyager.appscode.com/v1beta1/namespaces/default/certificates/kitecicom
-  UID:					97d91028-bcf5-11e7-bc3f-42010a800fd5
+  Creation Timestamp:             2017-11-27T23:44:42Z
+  Deletion Grace Period Seconds:  <nil>
+  Deletion Timestamp:             <nil>
+  Generation:                     0
+  Resource Version:               33312
+  Self Link:                      /apis/voyager.appscode.com/v1beta1/namespaces/default/certificates/kitecipro
+  UID:                            f105dd07-d3cc-11e7-8b04-02cf95c35e16
 Spec:
-  Acme User Secret Name:	acme-account
+  Acme User Secret Name:  acme-account
   Challenge Provider:
-    Http:
-      Ingress:
-        API Version:	voyager.appscode.com/v1beta1
-        Kind:		Ingress
-        Name:		test-ingress
+    Dns:
+      Provider:  route53
   Domains:
-    kiteci.com
+    kiteci.pro
+Status:
+  Conditions:
+    Last Update Time:  2017-11-27T23:46:19Z
+    Type:              Issued
+  Last Issued Certificate:
+    Account Ref:      https://acme-v01.api.letsencrypt.org/acme/reg/24975560
+    Cert Stable URL:
+    Cert URL:         https://acme-v01.api.letsencrypt.org/acme/cert/04e8ad4af6110eab90e8abaef338c5ce9049
+    Not After:        2018-02-25T22:46:19Z
+    Not Before:       2017-11-27T22:46:19Z
+    Serial Number:    427624998516761213595074237026103943139401
 Events:
-  FirstSeen	LastSeen	Count	From			SubObjectPath	Type		Reason		Message
-  ---------	--------	-----	----			-------------	--------	------		-------
-  20m		20m		1	voyager operator			Normal		IssueSuccessful	Successfully issued certificate
+  Type    Reason           Age   From              Message
+  ----    ------           ----  ----              -------
+  Normal  IssueSuccessful  1m    voyager-operator  Successfully issued certificate
+  Normal  IssueSuccessful  1m    voyager operator  Successfully issued certificate
 ```
