@@ -126,3 +126,15 @@ Here, we are running voyager operator pod on master node. So, we will grant thes
 
 **NB:** _If you decide to run voyager operator on regular nodes, then you can grant these additional IAM permissions to the node IAM role for your cluster. Please note that this will allow any pods running on the nodes to perform these api calls._
 
+### Create IAM User
+If you are running cluster on cloud providers other than AWS but want to use Route53 as your DNS provider, this is your only option. You can also use this method, for clusters running on AWS.
+
+Here we will create a new IAM role called `voayegr` and grant it the necessary permissions. Then we wil issue an access key pair for this IAM role and pass this to voyager using a Kubernetes secret.
+
+```console
+aws iam create-user --user-name voyager
+aws iam put-user-policy --user-name voyager --policy-name voyager --policy-document ./voyager-policy.json
+
+```
+
+
