@@ -111,9 +111,14 @@ When kops creates a cluster, it creates 2 IAM roles: one for the master and one 
 
 Here, we are running voyager operator pod on master node. So, we will grant these permissions to the role assigned to the master instance. To do this, take the following steps:
 
-- GO to EC2 dashboard and identify the IAM role for your master instance.
+- Go to your EC2 dashboard and identify the IAM role for your master instance.
 
 ![master-iam-role](/master-iam-role.png)
+
+- Go the [IAM roles console](https://console.aws.amazon.com/iam/home#/roles) and select the master IAM role for your cluster.
+
+![master-role](/master-iam-role-console.png)
+
 
 
 If you decide to run voyager operator on regular nodes, then you can grant these additional IAM permissions to the node IAM role. Please note that this will allow any pods running on the nodes to perform these api calls.
