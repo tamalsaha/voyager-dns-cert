@@ -133,8 +133,12 @@ Here we will create a new IAM role called `voayegr` and grant it the necessary p
 
 ```console
 aws iam create-user --user-name voyager
-aws iam put-user-policy --user-name voyager --policy-name voyager --policy-document ./voyager-policy.json
-
+aws iam put-user-policy --user-name voyager --policy-name voyager --policy-document file://$PWD/voyager-policy.json
+aws iam create-access-key --user-name voyager
 ```
+
+**NB**:
+ - Please make sure that you have updated the voyager-policy.json file to use the hosted zone id for your domain.
+ - _Please note that the `file://` prefix is required, otherwise you will get an error like `An error occurred (MalformedPolicyDocument) when calling the PutUserPolicy operation: Syntax errors in policy.`_
 
 
