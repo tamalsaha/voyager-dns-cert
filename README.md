@@ -127,7 +127,7 @@ Here, we are running voyager operator pod on master node. So, we will grant thes
 **NB:** _If you decide to run voyager operator on regular nodes, then you can grant these additional IAM permissions to the node IAM role for your cluster. Please note that this will allow any pods running on the nodes to perform these api calls._
 
 ### option #2: Create IAM User
-If you are running cluster on cloud providers other than AWS but want to use Route53 as your DNS provider, this is your only option. You can also use this method, for clusters running on AWS.
+If you are running cluster on cloud providers other than AWS but want to use Route53 as your DNS provider, this is your only option. You can also use this method for clusters running on AWS.
 
 Here we will create a new IAM role called `voayegr` and grant it the necessary permissions. Then we wil issue an access key pair for this IAM role and pass this to voyager using a Kubernetes secret.
 
@@ -135,10 +135,30 @@ Here we will create a new IAM role called `voayegr` and grant it the necessary p
 aws iam create-user --user-name voyager
 aws iam put-user-policy --user-name voyager --policy-name voyager --policy-document file://$PWD/voyager-policy.json
 aws iam create-access-key --user-name voyager
+
+kubectl create secret generic voyager-route53 --namespace default \
+  --from-literal=AWS_ACCESS_KEY_ID=INSERT_YOUR_ACCESS_KEY_ID_HERE \
+  --from-literal=AWS_SECRET_ACCESS_KEY=INSERT_YOUR_SECRET_ACCESS_KEY_HERE \
+  --from-literal=AWS_HOSTED_ZONE_ID=INSERT_YOUR_HOSTED_ZONE_ID_HERE
+
+kubectl get secret voyager-route53 -o yaml
+apiVersion: v1
+data:
+  AWS_ACCESS_KEY_ID: SU5TRVJUX1lPVVJfQUNDRVNTX0tFWV9JRF9IRVJF
+  AWS_HOSTED_ZONE_ID: SU5TRVJUX1lPVVJfSE9TVEVEX1pPTkVfSURfSEVSRQ==
+  AWS_SECRET_ACCESS_KEY: SU5TRVJUX1lPVVJfU0VDUkVUX0FDQ0VTU19LRVlfSEVSRQ==
+kind: Secret
+metadata:
+  creationTimestamp: 2017-11-27T23:17:31Z
+  name: voyager-route53
+  namespace: default
+  resourceVersion: "16160"
+  selfLink: /api/v1/namespaces/default/secrets/voyager-route53
+  uid: 24949869-d3c9-11e7-98b3-08002787a1b5
+type: Opaque
 ```
 
 **NB**:
  - Please make sure that you have updated the voyager-policy.json file to use the hosted zone id for your domain.
  - _Please note that the `file://` prefix is required, otherwise you will get an error like `An error occurred (MalformedPolicyDocument) when calling the PutUserPolicy operation: Syntax errors in policy.`_
-
-
+ - 
