@@ -38,6 +38,16 @@ In this tutorial, I am going to use `kiteci.pro` domain that was purchased on na
 
 ![create-hosted-zone](/create-hosted-zone.png)
 
+Once the hosted zone is created, you can see the list of name servers in AWS console.
+
+![ns-servers](/ns-servers.png)
+
+Now, go to the website of your domain registrar and update the list of name servers.
+
+![domain-registrar](/domain-registrar.png)
+
+Give time to propagate the updated DNS records. You can use the following command to confirm that the name server records has been updated.
+
 ```console
 $ dig -t ns kiteci.pro
 
