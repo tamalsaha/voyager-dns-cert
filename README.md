@@ -183,6 +183,19 @@ Create the Certificate CRD to issue TLS certificate from Let's Encrypt using DNS
 
 ```console
 kubectl apply -f crt.yaml
+
+apiVersion: voyager.appscode.com/v1beta1
+kind: Certificate
+metadata:
+  name: kitecipro
+  namespace: default
+spec:
+  domains:
+  - kiteci.pro
+  acmeUserSecretName: acme-account
+  challengeProvider:
+    dns:
+      provider: route53
 ```
 
 Now wait a bit and you should see a new secret named `tls-kitecipro`. This contains the `tls.crt` and `tls.key` .
