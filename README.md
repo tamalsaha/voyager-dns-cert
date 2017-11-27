@@ -206,6 +206,19 @@ NAME                  TYPE                                  DATA      AGE
 acme-account          Opaque                                3         2m
 default-token-q3r9h   kubernetes.io/service-account-token   3         7h
 tls-kitecipro         kubernetes.io/tls                     2         20s
+
+$ kubectl describe secrets tls-kitecipro
+Name:         tls-kitecipro
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Type:  kubernetes.io/tls
+
+Data
+====
+tls.crt:  3428 bytes
+tls.key:  1679 bytes
 ```
 
 ```console
