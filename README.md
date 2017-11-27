@@ -104,3 +104,17 @@ To issue SSL certificate using Let's Encrypt, we have to prove that we own the `
 }
 ```
 
+There are few different ways to grant these permissions to voyager operator pods.
+
+### Using Instance IAM Role
+When kops creates a cluster, it creates 2 IAM roles: one for the master and one for the nodes. You can grant these additional IAM permissions to the appropriate instance IAM role.
+
+Here, we are running voyager operator pod on master node. So, we will grant these permissions to the role assigned to the master instance. To do this, take the following steps:
+
+- GO to EC2 dashboard and identify the IAM role for your master instance.
+
+![master-iam-role](/master-iam-role.png)
+
+
+If you decide to run voyager operator on regular nodes, then you can grant these additional IAM permissions to the node IAM role. Please note that this will allow any pods running on the nodes to perform these api calls.
+
