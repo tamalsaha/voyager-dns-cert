@@ -160,5 +160,7 @@ type: Opaque
 
 **NB**:
  - Please make sure that you have updated the voyager-policy.json file to use the hosted zone id for your domain.
- - _Please note that the `file://` prefix is required, otherwise you will get an error like `An error occurred (MalformedPolicyDocument) when calling the PutUserPolicy operation: Syntax errors in policy.`_
- - 
+ - The _`file://` prefix is required_, otherwise you will get an error like `An error occurred (MalformedPolicyDocument) when calling the PutUserPolicy operation: Syntax errors in policy.`
+ - The Kubernetes secret must be created in the same namespace where the `Certificate` object exists.
+ - `AWS_HOSTED_ZONE_ID` key is optional and will be automatically detected from DNS records, if not found in secret. If you are trying to issue a SANS certificate with multiple top level domains, do not set `AWS_HOSTED_ZONE_ID` in the secret.
+
