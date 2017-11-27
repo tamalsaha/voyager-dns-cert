@@ -41,8 +41,8 @@ $ dig -t ns kiteci.pro
 ; <<>> DiG 9.10.3-P4-Ubuntu <<>> -t ns kiteci.pro
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 5237
-;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 5
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 57300
+;; flags: qr rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 1
 
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 512
@@ -50,17 +50,13 @@ $ dig -t ns kiteci.pro
 ;kiteci.pro.			IN	NS
 
 ;; ANSWER SECTION:
-kiteci.pro.		1800	IN	NS	dns1.registrar-servers.com.
-kiteci.pro.		1800	IN	NS	dns2.registrar-servers.com.
+kiteci.pro.		21599	IN	NS	ns-109.awsdns-13.com.
+kiteci.pro.		21599	IN	NS	ns-1404.awsdns-47.org.
+kiteci.pro.		21599	IN	NS	ns-1623.awsdns-10.co.uk.
+kiteci.pro.		21599	IN	NS	ns-697.awsdns-23.net.
 
-;; ADDITIONAL SECTION:
-dns1.registrar-servers.com. 1480 IN	A	216.87.155.33
-dns1.registrar-servers.com. 1021 IN	AAAA	2620:74:19::33
-dns2.registrar-servers.com. 141785 IN	A	216.87.152.33
-dns2.registrar-servers.com. 1784 IN	AAAA	2001:502:cbe4::33
-
-;; Query time: 24 msec
+;; Query time: 58 msec
 ;; SERVER: 127.0.1.1#53(127.0.1.1)
-;; WHEN: Mon Nov 27 13:37:04 PST 2017
-;; MSG SIZE  rcvd: 186
+;; WHEN: Mon Nov 27 13:40:03 PST 2017
+;; MSG SIZE  rcvd: 179
 ```
