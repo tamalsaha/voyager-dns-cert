@@ -12,3 +12,20 @@ $ kubectl version --short
 Client Version: v1.8.3
 Server Version: v1.7.10
 ```
+
+## Deploy Voyager operator
+
+```console
+# install without RBAC
+curl -fsSL https://raw.githubusercontent.com/appscode/voyager/5.0.0-rc.4/hack/deploy/voyager.sh | bash -s -- aws
+
+# run on master
+kubectl patch deploy voyager-operator -n kube-system \
+  --patch "$(curl -fsSL https://raw.githubusercontent.com/appscode/voyager/5.0.0-rc.4/hack/deploy/run-on-master.yaml)"
+```
+
+If you are trying this on a RBAC enabled cluster, pass the flag `--rbac` to installer script.
+```console
+# install without RBAC
+curl -fsSL https://raw.githubusercontent.com/appscode/voyager/5.0.0-rc.4/hack/deploy/voyager.sh | bash -s -- aws --rbac
+```
