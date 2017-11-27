@@ -198,7 +198,11 @@ spec:
       provider: route53
 ```
 
-Now wait a bit and you should see a new secret named `tls-kitecipro`. This contains the `tls.crt` and `tls.key` .
+Now, voyager will perform domain validation by adding a CNAME for each domain mentioned in this certificate. This CNAME will be removed after validation is complete. Once you successfully complete the challenges for a domain, the resulting authorization is cached for your account to use again later. Cached authorizations last for 30 days from the time of validation. If the certificate you requested has all of the necessary authorizations cached then validation will not happen again until the relevant cached authorizations expire.
+
+![acme-challenge](/acme-challenge.png)
+
+After several minutes, you should see a new secret named `tls-kitecipro`. This contains the `tls.crt` and `tls.key` .
 
 ```console
 $ kubectl get secrets
