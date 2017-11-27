@@ -124,5 +124,5 @@ Here, we are running voyager operator pod on master node. So, we will grant thes
 ![add-policy](/add-policy.png)
 
 
-**NB:** _If you decide to run voyager operator on regular nodes, then you can grant these additional IAM permissions to the node IAM role. Please note that this will allow any pods running on the nodes to perform these api calls._
+**NB:** _If you decide to run voyager operator on regular nodes, then you can grant these additional IAM permissions to the node IAM role for your cluster. Please note that this will allow any pods running on the nodes to perform these api calls._
 
