@@ -73,3 +73,34 @@ kiteci.pro.		21599	IN	NS	ns-697.awsdns-23.net.
 ;; WHEN: Mon Nov 27 13:40:03 PST 2017
 ;; MSG SIZE  rcvd: 179
 ```
+
+## Configure IAM Permissions
+To issue SSL certificate using Let's Encrypt, we have to prove that we own the `kiteci.pro` domain. The following AWS IAM policy document describes the permissions required for voyager operator to complete the DNS challenge. Replace <INSERT_YOUR_HOSTED_ZONE_ID_HERE> with the Route 53 zone ID of the domain you are authorizing.
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "route53:GetChange",
+                "route53:ListHostedZonesByName"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "route53:ChangeResourceRecordSets"
+            ],
+            "Resource": [
+                "arn:aws:route53:::hostedzone/<INSERT_YOUR_HOSTED_ZONE_ID_HERE>"
+            ]
+        }
+    ]
+}
+```
+
