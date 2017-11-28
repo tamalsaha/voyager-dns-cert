@@ -405,7 +405,7 @@ Please consult the official document on this matter: https://letsencrypt.org/doc
 ### How to use Let's Encrypt staging servers?
 If you are just testing Voyager and want to avoid hitting the rate limits in LE productoion environment, you have 2 options:
 - Buy a cheap domain for testing. There are lot of $0.99/yr domains available these days.
-- You can tell voyager to use the LE staging servers for issuing the certificate. The issued certificate is not trusted, hence should not be used in production websites. But this works great for testing setups. To use the staging environment, set the key `ACME_SERVER_URL` in your acme secret in addition to your email address.
+- You can tell voyager to use the LE staging servers for issuing the certificate. The issued certificate is not trusted, hence should not be used in production websites. But this works great for testing purposes. To use the staging environment, set the key `ACME_SERVER_URL` in your acme secret in addition to your email address.
 
 ```console
 kubectl create secret generic acme-account \
@@ -419,7 +419,7 @@ Given your acme email and acme server url (if provided), voyager operator will o
 ### How can I distribute the issued ssl certificates?
 There are several options:
 - If you are trying to distribute the same ssl certificate across different namespaces of a cluster, you can use a tools like [kubed](https://github.com/appscode/kubed/blob/master/docs/tutorials/config-syncer.md).
-- If you want to distribute the issued certificates across different clusters, you can setup Voyager to issue certificates independently on each cluster. Please read the rate limiting restrictions for LE. The other option is to use [Kubernetes cluster federation](https://kubernetes.io/docs/tasks/administer-federation/secret/) but it might not be worth the trouble if this is your ownly requirements.
+- If you want to distribute the issued certificates across different clusters, you can setup Voyager to issue certificates independently on each cluster. Please read the rate limiting restrictions for LE. The other option is to use [Kubernetes cluster federation](https://kubernetes.io/docs/tasks/administer-federation/secret/) but it might not be worth the trouble if this is your only usecase for cluster federation.
 - Just manually copy paste the `tls-***` secret to your destination cluster or namespace.
 
 
