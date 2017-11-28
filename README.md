@@ -222,8 +222,8 @@ Type:  kubernetes.io/tls
 
 Data
 ====
-tls.crt:  3428 bytes
-tls.key:  1679 bytes
+tls.crt:  3452 bytes
+tls.key:  1675 bytes
 ```
 
 ```console
@@ -350,4 +350,4 @@ $ dig -t cname +short www.kiteci.pro
 a65b35533d3d211e78b0402cf95c35e1-1933171379.us-east-1.elb.amazonaws.com.
 ```
 
-6. Now open URL http://kiteci.pro . This should show you the familiar nginx welcome page.
+6. Now open URL https://www.kiteci.pro . This should show you the familiar nginx welcome page.
