@@ -443,7 +443,7 @@ There are several options:
 
 
 ### How to issue certificate with multiple domains?
-The above example shows how to issue a SANS certificate with multiple domains. The only restriction is that all domains must be using the same DNS provider. They can use different domain registrars.
+The above example shows how to issue a SANS certificate with multiple domains. The only restriction is that all domains must be using the same DNS provider account. They can use different domain registrars.
 
 
 ### How to issue Wildcard certificates via Let's Encrypt?
