@@ -329,13 +329,40 @@ kubectl run echoserver --image=gcr.io/google_containers/echoserver:1.4
 kubectl expose deployment echoserver --name=echo --port=80 --target-port=8080
 ```
 
-3. Now create Ingress `ing-tls.yaml`
+Now create Ingress `ing-tls.yaml`
 
 ```console
 kubectl apply -f ing-tls.yaml
+
+apiVersion: voyager.appscode.com/v1beta1
+kind: Ingress
+metadata:
+  name: test-ingress
+  namespace: default
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - www.kiteci.pro
+    ref:
+      kind: Certificate
+      name: kitecipro
+  rules:
+  - host: www.kiteci.pro
+    http:
+      paths:
+      - path: /web
+        backend:
+          serviceName: web
+          servicePort: 80
+      - path: /
+        backend:
+          serviceName: echo
+          servicePort: 80
 ```
 
-4. Wait for the LoadBlanacer ip to be assigned. Once the IP is assigned update your DNS provider to set the LoadBlancer IP as the A record for test domain `kiteci.pro`
+Wait for the LoadBlanacer CNAME to be assigned. Once the CNAME is assigned, set the LoadBlancer hostname as the CNAME record for test domain `www.kiteci.pro`
 
 ```console
 $ kubectl get svc voyager-test-ingress -o wide
@@ -343,11 +370,13 @@ NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP              
 voyager-test-ingress   LoadBalancer   100.67.213.242   a65b35533d3d211e78b0402cf95c35e1-1933171379.us-east-1.elb.amazonaws.com   443:31708/TCP,80:31905/TCP   36s       origin-api-group=voyager.appscode.com,origin-name=test-ingress,origin=voyager
 ```
 
-5. Now wait a bit for DNs to propagate. Run the following command to confirm DNS propagation.
+![cname-record](/cname-record.png)
+
+Now wait a bit for DNs to propagate. Run the following command to confirm DNS propagation.
 
 ```console
 $ dig -t cname +short www.kiteci.pro
 a65b35533d3d211e78b0402cf95c35e1-1933171379.us-east-1.elb.amazonaws.com.
 ```
 
-6. Now open URL https://www.kiteci.pro . This should show you the familiar nginx welcome page.
+Now open URL https://www.kiteci.pro/web . This should show you the familiar nginx welcome page. If you visit https://www.kiteci.pro , it will echo your connection info.
