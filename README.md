@@ -335,7 +335,7 @@ kubectl expose deployment echoserver --name=echo --port=80 --target-port=8080
 kubectl apply -f ing-tls.yaml
 ```
 
-4. Wait for the LoadBlanacer ip to be assigned. Once the IP is assigned update your DNS provider to set the LoadBlancer IP as the A record for test domain `kiteci.com`
+4. Wait for the LoadBlanacer ip to be assigned. Once the IP is assigned update your DNS provider to set the LoadBlancer IP as the A record for test domain `kiteci.pro`
 
 ```console
 $ kubectl get svc voyager-test-ingress -o wide
@@ -346,8 +346,8 @@ voyager-test-ingress   LoadBalancer   100.67.213.242   a65b35533d3d211e78b0402cf
 5. Now wait a bit for DNs to propagate. Run the following command to confirm DNS propagation.
 
 ```console
-$ dig +short kiteci.com
-104.198.234.66
+$ dig -t cname +short www.kiteci.pro
+a65b35533d3d211e78b0402cf95c35e1-1933171379.us-east-1.elb.amazonaws.com.
 ```
 
-6. Now open URL http://kiteci.com . This should show you the familiar nginx welcome page.
+6. Now open URL http://kiteci.pro . This should show you the familiar nginx welcome page.
