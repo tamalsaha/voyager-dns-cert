@@ -385,7 +385,7 @@ Now open URL https://www.kiteci.pro/web . This should show you the familiar ngin
 ## FAQ: Let's Encrypt
 
 ### How to renew my LE certificates?
-LE issues certificates that are valid for 90 days. Voyager operator will try renewing your certificate 7 days prior to expiration. Once renewed certificates are issued, HAProxy will be automatically updated to use the new certificate.
+LE issues certificates that are valid for 90 days. Voyager operator will try renewing your certificate 7 days prior to expiration. Once renewed certificates are issued, HAProxy will be automatically updated to use the new certificates.
 
 ### I think I did everything according to this doc but my certificate is not issuing? How do I debug?
 To debug, describe the certificate object and check the events listed under it. Voyager will report any warning events under the certificate object.
@@ -403,7 +403,7 @@ kubectl logs -f <voyager-pod-name> -n kube-system
 Please consult the official document on this matter: https://letsencrypt.org/docs/rate-limits/
 
 ### How to use Let's Encrypt staging servers?
-If you are just testing Voyager and want to avoid hitting the rate limits in LE productoion environment, there are 2 options:
+If you are just testing Voyager and want to avoid hitting the rate limits in LE productoion environment, you have 2 options:
 - Buy a cheap domain for testing. There are lot of $0.99/yr domains available these days.
 - You can tell voyager to use the LE staging servers for issuing the certificate. The issued certificate is not trusted, hence should not be used in production websites. But this works great for testing setups. To use the staging environment, set the key `ACME_SERVER_URL` in your acme secret in addition to your email address.
 
@@ -429,5 +429,3 @@ The above example shows how to issue a SANS certificate with multiple domains. T
 
 ### How to issue Wildcard certificates via Let's Encrypt?
 Wild card certificates are not supported by Let's Encrypt as of Nov 2017. Wildcard certificates are [coming to LE in 2018](https://letsencrypt.org/2017/07/06/wildcard-certificates-coming-jan-2018.html). Once this is officially supported, we hope to integrate that in Voyager.
-
-
