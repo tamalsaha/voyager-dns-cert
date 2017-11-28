@@ -384,7 +384,7 @@ Now open URL https://www.kiteci.pro/web . This should show you the familiar ngin
 
 ## FAQ: Let's Encrypt
 
-### How to renew my LE certificates?
+### How do I renew my LE certificates?
 LE issues certificates that are valid for 90 days. Voyager operator will try renewing your certificate 7 days prior to expiration. Once renewed certificates are issued, HAProxy will be automatically updated to use the new certificates.
 
 ### I think I did everything according to this doc but my certificate is not issuing? How do I debug?
