@@ -1,6 +1,6 @@
 # voyager-route53-cert
 
-This tutorial shows how to issue free SSL certificate from Let's Encrypt using DNS challenge for domains using Route53 DNS service.
+This tutorial shows how to issue free SSL certificate from Let's Encrypt via DNS challenge for domains using Route53 DNS service.
 
 This article has been tested with a kops managed Kubernetes cluster on AWS.
 
@@ -135,7 +135,7 @@ Here, we are running voyager operator pod on master node. So, we will grant thes
 
 If you are running cluster on cloud providers other than AWS but want to use Route53 as your DNS provider, this is your only option. You can also use this method for clusters running on AWS.
 
-Here we will create a new IAM role called `voayegr` and grant it the necessary permissions. Then we wil issue an access key pair for this IAM role and pass this to voyager using a Kubernetes secret.
+Here we will create a new IAM role called `voyager` and grant it the necessary permissions. Then we wil issue an access key pair for this IAM role and pass this to voyager using a Kubernetes secret.
 
 ```console
 aws iam create-user --user-name voyager
