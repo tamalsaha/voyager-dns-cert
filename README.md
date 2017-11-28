@@ -437,7 +437,7 @@ type: Opaque
 
 ### How can I distribute the issued ssl certificates?
 There are several options:
-- If you are trying to distribute the same ssl certificate across different namespaces of a cluster, you can use a tools like [kubed](https://github.com/appscode/kubed/blob/master/docs/tutorials/config-syncer.md).
+- If you are trying to distribute the same ssl certificate across different namespaces of a cluster, you can use a tool like [kubed](https://github.com/appscode/kubed/blob/master/docs/tutorials/config-syncer.md).
 - If you want to distribute the issued certificates across different clusters, you can setup Voyager to issue certificates independently on each cluster. Please read the rate limiting restrictions for LE. The other option is to use [Kubernetes cluster federation](https://kubernetes.io/docs/tasks/administer-federation/secret/) but it might not be worth the trouble if this is your only usecase for cluster federation.
 - Just manually copy paste the `tls-***` secret to your destination cluster or namespace.
 
