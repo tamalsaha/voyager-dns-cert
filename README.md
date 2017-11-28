@@ -429,3 +429,6 @@ The above example shows how to issue a SANS certificate with multiple domains. T
 
 ### How to issue Wildcard certificates via Let's Encrypt?
 Wild card certificates are not supported by Let's Encrypt as of Nov 2017. Wildcard certificates are [coming to LE in 2018](https://letsencrypt.org/2017/07/06/wildcard-certificates-coming-jan-2018.html). Once this is officially supported, we hope to integrate that in Voyager.
+
+### Does Voyager support OCSP stapling?
+Voyager currently does not issue certificates that use OCSp stapling. See [here](https://github.com/appscode/voyager/issues/531) for prior discussions.
