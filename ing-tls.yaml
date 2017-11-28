@@ -8,12 +8,12 @@ metadata:
 spec:
   tls:
   - hosts:
-    - kiteci.pro
+    - www.kiteci.pro
     ref:
       kind: Certificate
-      name: kitecicom
+      name: kitecipro
   rules:
-  - host: kiteci.pro
+  - host: www.kiteci.pro
     http:
       paths:
       - path: /web
