@@ -198,7 +198,7 @@ spec:
       provider: route53
 ```
 
-Now, voyager will perform domain validation by adding a CNAME for each domain mentioned in this certificate. This CNAME will be removed after validation is complete. Once you successfully complete the challenges for a domain, the resulting authorization is cached for your account to use again later. Cached authorizations last for 30 days from the time of validation. If the certificate you requested has all of the necessary authorizations cached then validation will not happen again until the relevant cached authorizations expire.
+Now, voyager will perform domain validation by adding a CNAME for each domain mentioned in this certificate using IAM role assigned to master instance. This CNAME will be removed after validation is complete. Once you successfully complete the challenges for a domain, the resulting authorization is cached for your account to use again later. Cached authorizations last for 30 days from the time of validation. If the certificate you requested has all of the necessary authorizations cached then validation will not happen again until the relevant cached authorizations expire.
 
 ![acme-challenge](/acme-challenge.png)
 
@@ -265,4 +265,51 @@ Events:
   ----    ------           ----  ----              -------
   Normal  IssueSuccessful  1m    voyager-operator  Successfully issued certificate
   Normal  IssueSuccessful  1m    voyager operator  Successfully issued certificate
+```
+
+**NB**
+
+- By default, voyager will store the issued SSL certificates in a secret named as `tls-<certificate-name>`. If you want to store the issued certificates in a different secret, you can provide that in that in the `spec.storage.secret.name` field in the `Certificate` object.
+
+```console
+$ cat crt-secret-store.yaml
+
+apiVersion: voyager.appscode.com/v1beta1
+kind: Certificate
+metadata:
+  name: kitecipro
+  namespace: default
+spec:
+  domains:
+  - kiteci.pro
+  acmeUserSecretName: acme-account
+  challengeProvider:
+    dns:
+      provider: route53
+  storage:
+    secret:
+      name: cert-kitecipro
+```
+
+- If you created an IAM user for voyager, you can pass it by setting `spec.challengeProvider.dns.credentialSecretName` field.
+
+```console
+$ cat crt-dns-credential.yaml
+
+apiVersion: voyager.appscode.com/v1beta1
+kind: Certificate
+metadata:
+  name: kitecipro-iam
+  namespace: default
+spec:
+  domains:
+  - kiteci.pro
+  acmeUserSecretName: acme-account
+  challengeProvider:
+    dns:
+      provider: route53
+      credentialSecretName: voyager-route53
+  storage:
+    secret:
+      name: cert-kitecipro
 ```
