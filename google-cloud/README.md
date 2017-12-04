@@ -146,17 +146,18 @@ Now, voyager will perform domain validation by setting a TXT record for each dom
 
 ![acme-challenge](acme-challenge.png)
 
-After several minutes, you should see a new secret named `tls-kitecipro`. This contains the `tls.crt` and `tls.key` .
+After several minutes, you should see a new secret named `tls-kitecicom`. This contains the `tls.crt` and `tls.key` .
 
 ```console
 $ kubectl get secrets
 NAME                  TYPE                                  DATA      AGE
-acme-account          Opaque                                3         2m
-default-token-q3r9h   kubernetes.io/service-account-token   3         7h
-tls-kitecipro         kubernetes.io/tls                     2         20s
+acme-account          Opaque                                3         12m
+default-token-t4m4f   kubernetes.io/service-account-token   3         1h
+tls-kitecicom         kubernetes.io/tls                     2         38s
+voyager-gce           Opaque                                2         16m
 
-$ kubectl describe secrets tls-kitecipro
-Name:         tls-kitecipro
+$ kubectl describe secrets tls-kitecicom
+Name:         tls-kitecicom
 Namespace:    default
 Labels:       <none>
 Annotations:  <none>
@@ -170,40 +171,42 @@ tls.key:  1675 bytes
 ```
 
 ```console
-$ kubectl describe cert kitecipro
-Name:         kitecipro
+$ kubectl describe cert kitecicom
+Name:         kitecicom
 Namespace:    default
 Labels:       <none>
-Annotations:  kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"voyager.appscode.com/v1beta1","kind":"Certificate","metadata":{"annotations":{},"name":"kitecipro","namespace":"default"},"spec":{"acmeU...
+Annotations:  kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"voyager.appscode.com/v1beta1","kind":"Certificate","metadata":{"annotations":{},"name":"kitecicom","namespace":"default"},"spec":{"acmeU...
 API Version:  voyager.appscode.com/v1beta1
 Kind:         Certificate
 Metadata:
   Cluster Name:
-  Creation Timestamp:             2017-11-27T23:44:42Z
+  Creation Timestamp:             2017-12-04T17:50:07Z
   Deletion Grace Period Seconds:  <nil>
   Deletion Timestamp:             <nil>
   Generation:                     0
-  Resource Version:               33312
-  Self Link:                      /apis/voyager.appscode.com/v1beta1/namespaces/default/certificates/kitecipro
-  UID:                            f105dd07-d3cc-11e7-8b04-02cf95c35e16
+  Resource Version:               8514
+  Self Link:                      /apis/voyager.appscode.com/v1beta1/namespaces/default/certificates/kitecicom
+  UID:                            90e74603-d91b-11e7-81d9-42010a8000db
 Spec:
   Acme User Secret Name:  acme-account
   Challenge Provider:
     Dns:
-      Provider:  route53
+      Credential Secret Name:  voyager-gce
+      Provider:                gce
   Domains:
-    kiteci.pro
+    kiteci.com
+    www.kiteci.com
 Status:
   Conditions:
-    Last Update Time:  2017-11-27T23:46:19Z
+    Last Update Time:  2017-12-04T17:51:49Z
     Type:              Issued
   Last Issued Certificate:
-    Account Ref:      https://acme-v01.api.letsencrypt.org/acme/reg/24975560
+    Account Ref:      https://acme-v01.api.letsencrypt.org/acme/reg/25335618
     Cert Stable URL:
-    Cert URL:         https://acme-v01.api.letsencrypt.org/acme/cert/04e8ad4af6110eab90e8abaef338c5ce9049
-    Not After:        2018-02-25T22:46:19Z
-    Not Before:       2017-11-27T22:46:19Z
-    Serial Number:    427624998516761213595074237026103943139401
+    Cert URL:         https://acme-v01.api.letsencrypt.org/acme/cert/031f94c84a8b8634b3e58a8f2a9ac56013b8
+    Not After:        2018-03-04T16:51:48Z
+    Not Before:       2017-12-04T16:51:48Z
+    Serial Number:    272083376884530266786654704451984654603192
 Events:
   Type    Reason           Age   From              Message
   ----    ------           ----  ----              -------
@@ -221,40 +224,17 @@ $ cat crt-secret-store.yaml
 apiVersion: voyager.appscode.com/v1beta1
 kind: Certificate
 metadata:
-  name: kitecipro
+  name: kitecicom
   namespace: default
 spec:
   domains:
-  - kiteci.pro
-  - www.kiteci.pro
+  - kiteci.com
+  - www.kiteci.com
   acmeUserSecretName: acme-account
   challengeProvider:
     dns:
-      provider: route53
-  storage:
-    secret:
-      name: cert-kitecipro
-```
-
-- If you created an IAM user for voyager, you can pass it by setting `spec.challengeProvider.dns.credentialSecretName` field.
-
-```console
-$ cat crt-dns-credential.yaml
-
-apiVersion: voyager.appscode.com/v1beta1
-kind: Certificate
-metadata:
-  name: kitecipro-iam
-  namespace: default
-spec:
-  domains:
-  - kiteci.pro
-  - www.kiteci.pro
-  acmeUserSecretName: acme-account
-  challengeProvider:
-    dns:
-      provider: route53
-      credentialSecretName: voyager-route53
+      provider: gce
+      credentialSecretName: voyager-gce
   storage:
     secret:
       name: cert-kitecipro
@@ -287,12 +267,12 @@ metadata:
 spec:
   tls:
   - hosts:
-    - www.kiteci.pro
+    - www.kiteci.com
     ref:
       kind: Certificate
-      name: kitecipro
+      name: kitecicom
   rules:
-  - host: www.kiteci.pro
+  - host: www.kiteci.com
     http:
       paths:
       - path: /web
@@ -305,17 +285,17 @@ spec:
           servicePort: 80
 ```
 
-Wait for the LoadBlanacer CNAME to be assigned. Once the CNAME is assigned, set the LoadBlancer hostname as the CNAME record for test domain `www.kiteci.pro`
+Wait for the LoadBlanacer IP to be assigned. Once the IP is assigned, set the LoadBlancer IP as the A record for test domain `www.kiteci.com`
 
 ```console
 $ kubectl get svc voyager-test-ingress -o wide
-NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                      AGE       SELECTOR
-voyager-test-ingress   LoadBalancer   100.67.213.242   a65b35533d3d211e78b0402cf95c35e1-1933171379.us-east-1.elb.amazonaws.com   443:31708/TCP,80:31905/TCP   36s       origin-api-group=voyager.appscode.com,origin-name=test-ingress,origin=voyager
+NAME                   TYPE           CLUSTER-IP     EXTERNAL-IP       PORT(S)                      AGE       SELECTOR
+voyager-test-ingress   LoadBalancer   10.15.243.46   104.155.134.134   443:31886/TCP,80:31703/TCP   1m        origin-api-group=voyager.appscode.com,origin-name=test-ingress,origin=voyager
 ```
 
-![cname-record](/cname-record.png)
+![a-record](a-record.png)
 
-Now wait a bit for DNs to propagate. Run the following command to confirm DNS propagation.
+Now wait a bit for DNS to propagate. Run the following command to confirm DNS propagation.
 
 ```console
 $ dig -t cname +short www.kiteci.pro
