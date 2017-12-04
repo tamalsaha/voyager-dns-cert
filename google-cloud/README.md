@@ -84,6 +84,8 @@ ns-cloud-e4.googledomains.com. 144080 IN AAAA	2001:4860:4802:38::6e
 
 To issue SSL certificate using Let's Encrypt, we have to prove that we own the `kiteci.com` domain. Voyager operator requires necessary permission to add and remove a TXT record for domain `_acme-challenge.<domain>` to complete the DNS challenge. Here we will create a new ServiceAccount called `voyager` in [Service Accounts console](https://console.cloud.google.com/iam-admin/serviceaccounts/project) and grant it `DNS Administrator` permission. Then we wil issue an access key pair for this IAM role and pass this to voyager using a Kubernetes secret.
 
+![create-svc-account](create-svc-account.png)
+
 ```console
 mv <your_service_account_key>.json GOOGLE_SERVICE_ACCOUNT_JSON_KEY
 
