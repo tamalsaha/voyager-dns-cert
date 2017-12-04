@@ -32,15 +32,15 @@ curl -fsSL https://raw.githubusercontent.com/appscode/voyager/5.0.0-rc.5/hack/de
 
 In this tutorial, I am going to use `kiteci.com` domain that was purchased on namecheap.com . Now, go to the [DNS page](https://console.cloud.google.com/net-services/dns/zones) on your Google Cloud console and create a zone for this domain.
 
-![create-zone](/create-zone.png)
+![create-zone](create-zone.png)
 
 Once the zone is created, you can see the list of name servers in Google cloud console.
 
-![ns-servers](/ns-servers.png)
+![ns-servers](ns-servers.png)
 
 Now, go to the website of your domain registrar and update the list of name servers.
 
-![domain-registrar](/domain-registrar.png)
+![domain-registrar](domain-registrar.png)
 
 Give time to propagate the updated DNS records. You can use the following command to confirm that the name server records has been updated.
 
