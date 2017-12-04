@@ -299,7 +299,7 @@ Now wait a bit for DNS to propagate. Run the following command to confirm DNS pr
 
 ```console
 $ dig +short www.kiteci.com
-a65b35533d3d211e78b0402cf95c35e1-1933171379.us-east-1.elb.amazonaws.com.
+10.15.243.46
 ```
 
-Now open URL https://www.kiteci.pro/web . This should show you the familiar nginx welcome page. If you visit https://www.kiteci.pro , it will echo your connection info.
+Now open URL https://www.kiteci.com/web . This should show you the familiar nginx welcome page. If you visit https://www.kiteci.com , it will echo your connection info.
