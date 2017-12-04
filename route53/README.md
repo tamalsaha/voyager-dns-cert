@@ -1,4 +1,4 @@
-# voyager-route53-cert
+# Issue Let's Encrypt certificate using AWS Route53
 
 This tutorial shows how to issue free SSL certificate from Let's Encrypt via DNS challenge for domains using Route53 DNS service.
 
