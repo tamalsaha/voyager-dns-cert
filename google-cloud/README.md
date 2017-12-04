@@ -16,18 +16,14 @@ Deploy Voyager operator following instructions here: https://github.com/appscode
 
 ```console
 # install without RBAC
-curl -fsSL https://raw.githubusercontent.com/appscode/voyager/5.0.0-rc.4/hack/deploy/voyager.sh \
-  | bash -s -- aws
-
-# run on master
-kubectl patch deploy voyager-operator -n kube-system \
-  --patch "$(curl -fsSL https://raw.githubusercontent.com/appscode/voyager/5.0.0-rc.4/hack/deploy/run-on-master.yaml)"
+curl -fsSL https://raw.githubusercontent.com/appscode/voyager/5.0.0-rc.5/hack/deploy/voyager.sh \
+  | bash -s -- gke
 ```
 
 If you are trying this on a RBAC enabled cluster, pass the flag `--rbac` to installer script.
 
 ```console
 # install without RBAC
-curl -fsSL https://raw.githubusercontent.com/appscode/voyager/5.0.0-rc.4/hack/deploy/voyager.sh \
-  | bash -s -- aws --rbac
+curl -fsSL https://raw.githubusercontent.com/appscode/voyager/5.0.0-rc.5/hack/deploy/voyager.sh \
+  | bash -s -- gke --rbac
 ```
