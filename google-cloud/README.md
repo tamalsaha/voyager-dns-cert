@@ -45,27 +45,37 @@ Now, go to the website of your domain registrar and update the list of name serv
 Give time to propagate the updated DNS records. You can use the following command to confirm that the name server records has been updated.
 
 ```console
-$ dig -t ns kiteci.pro
+$ dig -t ns kiteci.com
 
-; <<>> DiG 9.10.3-P4-Ubuntu <<>> -t ns kiteci.pro
+; <<>> DiG 9.10.3-P4-Ubuntu <<>> -t ns kiteci.com
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 57300
-;; flags: qr rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 1
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 60415
+;; flags: qr rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 9
 
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 512
 ;; QUESTION SECTION:
-;kiteci.pro.			IN	NS
+;kiteci.com.			IN	NS
 
 ;; ANSWER SECTION:
-kiteci.pro.		21599	IN	NS	ns-109.awsdns-13.com.
-kiteci.pro.		21599	IN	NS	ns-1404.awsdns-47.org.
-kiteci.pro.		21599	IN	NS	ns-1623.awsdns-10.co.uk.
-kiteci.pro.		21599	IN	NS	ns-697.awsdns-23.net.
+kiteci.com.		21600	IN	NS	ns-cloud-e3.googledomains.com.
+kiteci.com.		21600	IN	NS	ns-cloud-e4.googledomains.com.
+kiteci.com.		21600	IN	NS	ns-cloud-e1.googledomains.com.
+kiteci.com.		21600	IN	NS	ns-cloud-e2.googledomains.com.
 
-;; Query time: 58 msec
+;; ADDITIONAL SECTION:
+ns-cloud-e1.googledomains.com. 143957 IN A	216.239.32.110
+ns-cloud-e1.googledomains.com. 144007 IN AAAA	2001:4860:4802:32::6e
+ns-cloud-e2.googledomains.com. 143976 IN A	216.239.34.110
+ns-cloud-e2.googledomains.com. 144137 IN AAAA	2001:4860:4802:34::6e
+ns-cloud-e3.googledomains.com. 144001 IN A	216.239.36.110
+ns-cloud-e3.googledomains.com. 144532 IN AAAA	2001:4860:4802:36::6e
+ns-cloud-e4.googledomains.com. 144141 IN A	216.239.38.110
+ns-cloud-e4.googledomains.com. 144080 IN AAAA	2001:4860:4802:38::6e
+
+;; Query time: 55 msec
 ;; SERVER: 127.0.1.1#53(127.0.1.1)
-;; WHEN: Mon Nov 27 13:40:03 PST 2017
-;; MSG SIZE  rcvd: 179
+;; WHEN: Mon Dec 04 09:15:19 PST 2017
+;; MSG SIZE  rcvd: 333
 ```
