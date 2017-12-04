@@ -79,3 +79,35 @@ ns-cloud-e4.googledomains.com. 144080 IN AAAA	2001:4860:4802:38::6e
 ;; WHEN: Mon Dec 04 09:15:19 PST 2017
 ;; MSG SIZE  rcvd: 333
 ```
+
+## Configure Service Account Permissions
+
+To issue SSL certificate using Let's Encrypt, we have to prove that we own the `kiteci.com` domain. Voyager operator requires necessary permission to add and remove a TXT record for domain `_acme-challenge.<domain>` to complete the DNS challenge. Here we will create a new ServiceAccount called `voyager` in [Service Accounts console](https://console.cloud.google.com/iam-admin/serviceaccounts/project) and grant it `DNS Administrator` permission. Then we wil issue an access key pair for this IAM role and pass this to voyager using a Kubernetes secret.
+
+```console
+mv <your_service_account_key>.json GOOGLE_SERVICE_ACCOUNT_JSON_KEY
+
+kubectl create secret generic voyager-gce --namespace default \
+  --from-literal=GCE_PROJECT=INSERT_YOUR_PROJECT_ID_HERE \
+  --from-file=GOOGLE_SERVICE_ACCOUNT_JSON_KEY
+
+$ kubectl get secret voyager-gce -o yaml
+apiVersion: v1
+data:
+  GCE_PROJECT: dGlnZXJ3b3Jrcy1rdWJl
+  GOOGLE_SERVICE_ACCOUNT_JSON_KEY: ewogICJ0eXBlIj2VhY2NvdW50LmNvbSIKfQo=
+kind: Secret
+metadata:
+  creationTimestamp: 2017-12-04T17:36:24Z
+  name: voyager-gce
+  namespace: default
+  resourceVersion: "7372"
+  selfLink: /api/v1/namespaces/default/secrets/voyager-gce
+  uid: a612c439-d919-11e7-81d9-42010a8000db
+type: Opaque
+```
+
+**NB**:
+
+- The Kubernetes secret must be created in the same namespace where the `Certificate` object exists.
+
