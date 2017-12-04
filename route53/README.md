@@ -1,4 +1,4 @@
-# voyager-route53-cert
+# Issue Let's Encrypt certificate using AWS Route53
 
 This tutorial shows how to issue free SSL certificate from Let's Encrypt via DNS challenge for domains using Route53 DNS service.
 
@@ -199,7 +199,7 @@ spec:
       provider: route53
 ```
 
-Now, voyager will perform domain validation by adding a CNAME for each domain mentioned in this certificate using IAM role assigned to master instance. This CNAME will be removed after validation is complete. Once you successfully complete the challenges for a domain, the resulting authorization is cached for your account to use again later. Cached authorizations last for 30 days from the time of validation. If the certificate you requested has all of the necessary authorizations cached then validation will not happen again until the relevant cached authorizations expire.
+Now, voyager will perform domain validation by setting a TXT record for each domain by prepending the label `_acme-challenge`to the domain name being validated in this certificate using IAM role assigned to master instance. This TXT record will be removed after validation is complete. Once you successfully complete the challenges for a domain, the resulting authorization is cached for your account to use again later. Cached authorizations last for 30 days from the time of validation. If the certificate you requested has all of the necessary authorizations cached then validation will not happen again until the relevant cached authorizations expire.
 
 ![acme-challenge](/acme-challenge.png)
 
