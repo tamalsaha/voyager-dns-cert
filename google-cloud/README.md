@@ -298,7 +298,7 @@ voyager-test-ingress   LoadBalancer   10.15.243.46   104.155.134.134   443:31886
 Now wait a bit for DNS to propagate. Run the following command to confirm DNS propagation.
 
 ```console
-$ dig -t cname +short www.kiteci.pro
+$ dig +short www.kiteci.com
 a65b35533d3d211e78b0402cf95c35e1-1933171379.us-east-1.elb.amazonaws.com.
 ```
 
