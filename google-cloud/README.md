@@ -113,3 +113,213 @@ type: Opaque
 
 - The Kubernetes secret must be created in the same namespace where the `Certificate` object exists.
 
+## Create Certificate
+
+Create a secret to provide ACME user email. Change the email to a valid email address and run the following command:
+
+```console
+kubectl create secret generic acme-account --from-literal=ACME_EMAIL=me@example.com
+```
+
+Create the Certificate CRD to issue TLS certificate from Let's Encrypt using DNS challenge.
+
+```console
+kubectl apply -f crt.yaml
+
+apiVersion: voyager.appscode.com/v1beta1
+kind: Certificate
+metadata:
+  name: kitecicom
+  namespace: default
+spec:
+  domains:
+  - kiteci.com
+  - www.kiteci.com
+  acmeUserSecretName: acme-account
+  challengeProvider:
+    dns:
+      provider: gce
+      credentialSecretName: voyager-gce
+```
+
+Now, voyager will perform domain validation by setting a TXT record for each domain by prepending the label `_acme-challenge`to the domain name being validated in this certificate. This TXT record will be removed after validation is complete. Once you successfully complete the challenges for a domain, the resulting authorization is cached for your account to use again later. Cached authorizations last for 30 days from the time of validation. If the certificate you requested has all of the necessary authorizations cached then validation will not happen again until the relevant cached authorizations expire.
+
+![acme-challenge](/acme-challenge.png)
+
+After several minutes, you should see a new secret named `tls-kitecipro`. This contains the `tls.crt` and `tls.key` .
+
+```console
+$ kubectl get secrets
+NAME                  TYPE                                  DATA      AGE
+acme-account          Opaque                                3         2m
+default-token-q3r9h   kubernetes.io/service-account-token   3         7h
+tls-kitecipro         kubernetes.io/tls                     2         20s
+
+$ kubectl describe secrets tls-kitecipro
+Name:         tls-kitecipro
+Namespace:    default
+Labels:       <none>
+Annotations:  <none>
+
+Type:  kubernetes.io/tls
+
+Data
+====
+tls.crt:  3452 bytes
+tls.key:  1675 bytes
+```
+
+```console
+$ kubectl describe cert kitecipro
+Name:         kitecipro
+Namespace:    default
+Labels:       <none>
+Annotations:  kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"voyager.appscode.com/v1beta1","kind":"Certificate","metadata":{"annotations":{},"name":"kitecipro","namespace":"default"},"spec":{"acmeU...
+API Version:  voyager.appscode.com/v1beta1
+Kind:         Certificate
+Metadata:
+  Cluster Name:
+  Creation Timestamp:             2017-11-27T23:44:42Z
+  Deletion Grace Period Seconds:  <nil>
+  Deletion Timestamp:             <nil>
+  Generation:                     0
+  Resource Version:               33312
+  Self Link:                      /apis/voyager.appscode.com/v1beta1/namespaces/default/certificates/kitecipro
+  UID:                            f105dd07-d3cc-11e7-8b04-02cf95c35e16
+Spec:
+  Acme User Secret Name:  acme-account
+  Challenge Provider:
+    Dns:
+      Provider:  route53
+  Domains:
+    kiteci.pro
+Status:
+  Conditions:
+    Last Update Time:  2017-11-27T23:46:19Z
+    Type:              Issued
+  Last Issued Certificate:
+    Account Ref:      https://acme-v01.api.letsencrypt.org/acme/reg/24975560
+    Cert Stable URL:
+    Cert URL:         https://acme-v01.api.letsencrypt.org/acme/cert/04e8ad4af6110eab90e8abaef338c5ce9049
+    Not After:        2018-02-25T22:46:19Z
+    Not Before:       2017-11-27T22:46:19Z
+    Serial Number:    427624998516761213595074237026103943139401
+Events:
+  Type    Reason           Age   From              Message
+  ----    ------           ----  ----              -------
+  Normal  IssueSuccessful  1m    voyager-operator  Successfully issued certificate
+  Normal  IssueSuccessful  1m    voyager operator  Successfully issued certificate
+```
+
+**NB**
+
+- By default, voyager will store the issued SSL certificates in a secret named as `tls-<certificate-name>`. If you want to store the issued certificates in a different secret, you can provide that in that in the `spec.storage.secret.name` field in the `Certificate` object.
+
+```console
+$ cat crt-secret-store.yaml
+
+apiVersion: voyager.appscode.com/v1beta1
+kind: Certificate
+metadata:
+  name: kitecipro
+  namespace: default
+spec:
+  domains:
+  - kiteci.pro
+  - www.kiteci.pro
+  acmeUserSecretName: acme-account
+  challengeProvider:
+    dns:
+      provider: route53
+  storage:
+    secret:
+      name: cert-kitecipro
+```
+
+- If you created an IAM user for voyager, you can pass it by setting `spec.challengeProvider.dns.credentialSecretName` field.
+
+```console
+$ cat crt-dns-credential.yaml
+
+apiVersion: voyager.appscode.com/v1beta1
+kind: Certificate
+metadata:
+  name: kitecipro-iam
+  namespace: default
+spec:
+  domains:
+  - kiteci.pro
+  - www.kiteci.pro
+  acmeUserSecretName: acme-account
+  challengeProvider:
+    dns:
+      provider: route53
+      credentialSecretName: voyager-route53
+  storage:
+    secret:
+      name: cert-kitecipro
+```
+
+## Configure Ingress
+
+We are going to use two separate services as backend. Run the following commands to deploy backends:
+
+```console
+kubectl run nginx --image=nginx
+kubectl expose deployment nginx --name=web --port=80 --target-port=80
+
+kubectl run echoserver --image=gcr.io/google_containers/echoserver:1.4
+kubectl expose deployment echoserver --name=echo --port=80 --target-port=8080
+```
+
+Now create Ingress `ing-tls.yaml`
+
+```console
+kubectl apply -f ing-tls.yaml
+
+apiVersion: voyager.appscode.com/v1beta1
+kind: Ingress
+metadata:
+  name: test-ingress
+  namespace: default
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - www.kiteci.pro
+    ref:
+      kind: Certificate
+      name: kitecipro
+  rules:
+  - host: www.kiteci.pro
+    http:
+      paths:
+      - path: /web
+        backend:
+          serviceName: web
+          servicePort: 80
+      - path: /
+        backend:
+          serviceName: echo
+          servicePort: 80
+```
+
+Wait for the LoadBlanacer CNAME to be assigned. Once the CNAME is assigned, set the LoadBlancer hostname as the CNAME record for test domain `www.kiteci.pro`
+
+```console
+$ kubectl get svc voyager-test-ingress -o wide
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                      AGE       SELECTOR
+voyager-test-ingress   LoadBalancer   100.67.213.242   a65b35533d3d211e78b0402cf95c35e1-1933171379.us-east-1.elb.amazonaws.com   443:31708/TCP,80:31905/TCP   36s       origin-api-group=voyager.appscode.com,origin-name=test-ingress,origin=voyager
+```
+
+![cname-record](/cname-record.png)
+
+Now wait a bit for DNs to propagate. Run the following command to confirm DNS propagation.
+
+```console
+$ dig -t cname +short www.kiteci.pro
+a65b35533d3d211e78b0402cf95c35e1-1933171379.us-east-1.elb.amazonaws.com.
+```
+
+Now open URL https://www.kiteci.pro/web . This should show you the familiar nginx welcome page. If you visit https://www.kiteci.pro , it will echo your connection info.
