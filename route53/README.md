@@ -110,7 +110,7 @@ To issue SSL certificate using Let's Encrypt, we have to prove that we own the `
 
 There are few different ways to grant these permissions to voyager operator pods.
 
-### option #1: Using Instance IAM Role
+### option 1: Using Instance IAM Role
 
 When kops creates a cluster, it creates 2 IAM roles: one for the master and one for the nodes. You can grant these additional IAM permissions to the appropriate instance IAM role.
 
@@ -131,7 +131,7 @@ Here, we are running voyager operator pod on master node. So, we will grant thes
 
 **NB:** _If you decide to run voyager operator on regular nodes, then you can grant these additional IAM permissions to the node IAM role for your cluster. Please note that this will allow any pods running on the nodes to perform these api calls._
 
-### option #2: Create IAM User
+### option 2: Create IAM User
 
 If you are running cluster on cloud providers other than AWS but want to use Route53 as your DNS provider, this is your only option. You can also use this method for clusters running on AWS.
 

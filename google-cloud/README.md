@@ -86,7 +86,7 @@ To issue SSL certificate using Let's Encrypt, we have to prove that we own the `
 
 There are few different ways to grant these permissions to voyager operator pods.
 
-## option 1: Create Service Account
+### option 1: Create Service Account
 If you are running cluster on cloud providers other than Google Cloud but want to use Google Cloud DNS as your DNS provider, this is your only option. You can also use this method for clusters running on Google Cloud.
 
 Here we will create a new ServiceAccount called `voyager` in [Service Accounts console](https://console.cloud.google.com/iam-admin/serviceaccounts/project) and grant it `DNS Administrator` permission. Then we wil issue a json key for this service account and pass this to voyager using a Kubernetes secret.
