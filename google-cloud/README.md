@@ -120,6 +120,17 @@ type: Opaque
 
 - The Kubernetes secret must be created in the same namespace where the `Certificate` object exists.
 
+### option 2: Using Compute Engine Default Service Account
+If your domains are hosted in the same Google Cloud project as your GKE cluster, you can use this mechanism. When you create your GKE cluster, enable `Cloud Platform` scope. This will allow voyager operator to update DNS records in this project.
+
+![gke-permissions](gke-permissions.png)
+
+**NB**:
+- I don't know how to apply these permission for an existing GKE cluster. If you know how to do that, please send me to pr.
+
+### option 3: Use `GOOGLE_APPLICATION_CREDENTIALS`
+Voyager operator can load a json key file whose path is specified by the GOOGLE_APPLICATION_CREDENTIALS environment variable. To use this option, mount a json key file into voyager operator deployment.
+
 ## Create Certificate
 
 Create a secret to provide ACME user email. Change the email to a valid email address and run the following command:
@@ -245,6 +256,26 @@ spec:
   storage:
     secret:
       name: cert-kitecipro
+```
+
+- If you enabled `Cloud Platform` scope for your GKE cluster (option 2), you don't need to set `spec.challengeProvider.dns.credentialSecretName` field.
+
+```console
+$ cat crt-gce.yaml
+
+apiVersion: voyager.appscode.com/v1beta1
+kind: Certificate
+metadata:
+  name: kitecicom
+  namespace: default
+spec:
+  domains:
+  - kiteci.com
+  - www.kiteci.com
+  acmeUserSecretName: acme-account
+  challengeProvider:
+    dns:
+      provider: gce
 ```
 
 ## Configure Ingress
